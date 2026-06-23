@@ -2,288 +2,374 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ポートフォリオ分析 06/23</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ポートフォリオ分類 06.24</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Hiragino Sans','Meiryo',sans-serif;background:#f8fafc;color:#1e293b;font-size:14px}
-.container{max-width:1000px;margin:0 auto;padding:16px}
-.header{background:linear-gradient(135deg,#1e293b,#334155);color:#fff;border-radius:12px;padding:18px 24px;margin-bottom:20px}
-.header h1{font-size:1.25rem;font-weight:700}
-.header .sub{font-size:0.82rem;opacity:0.75;margin-top:4px}
-.card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:18px;margin-bottom:20px}
-.card h2{font-size:0.95rem;font-weight:700;color:#334155;border-left:3px solid #3b82f6;padding-left:10px;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;font-size:0.82rem}
-th{background:#f1f5f9;padding:6px 8px;text-align:left;font-size:0.78rem;color:#64748b}
-td{padding:5px 8px;border-bottom:1px solid #f1f5f9}
-.pl-up{color:#16a34a;font-weight:600;text-align:right}
-.pl-dn{color:#dc2626;font-weight:600;text-align:right}
-.wow-up{color:#16a34a;font-weight:600;text-align:right;font-size:0.76rem;white-space:nowrap}
-.wow-dn{color:#dc2626;font-weight:600;text-align:right;font-size:0.76rem;white-space:nowrap}
-.gsub-wow-up{color:#16a34a;font-weight:700;text-align:right;font-size:0.76rem}
-.gsub-wow-dn{color:#dc2626;font-weight:700;text-align:right;font-size:0.76rem}
-.group-sub td{background:#f0f9ff;border-top:1px dashed #7dd3fc;border-bottom:2px solid #bae6fd;font-size:0.8rem}
-.gsub-name{color:#0369a1;font-weight:700;font-style:italic;padding-left:22px !important}
-.gsub-amt{text-align:right;font-weight:700;color:#0369a1}
-.gsub-up{color:#16a34a;font-weight:700;text-align:right}
-.gsub-dn{color:#dc2626;font-weight:700;text-align:right}
-.wrap-tag{font-size:0.68rem;background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:10px;margin-left:4px}
-.goal-track{flex:1;background:#e5e7eb;border-radius:4px;height:17px;position:relative;overflow:visible}
-.goal-fill.target{opacity:0.45}
-.goal-yen{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:0.66rem;font-weight:600;color:#555;white-space:nowrap}
-.goal-zero{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:0.68rem;color:#94a3b8}
-.goal-gap-row{display:flex;align-items:center;height:14px;margin-left:72px;padding-left:5px;border-left:2px solid #e2e8f0;margin-bottom:8px}
-.gv-badge{font-size:0.66rem;font-weight:700;padding:1px 7px;border-radius:10px;white-space:nowrap}
-.gv-badge.short{background:#fee2e2;color:#b91c1c}
-.gv-badge.over{background:#dcfce7;color:#15803d}
-.gv-badge.neut{background:#f1f5f9;color:#94a3b8}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif; background: #f1f5f9; color: #1a1a2e; padding: 24px; max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #64748b; font-size: 0.85rem; margin-bottom: 6px; }
+  .delta-badge { display: inline-block; background: #fee2e2; color: #b91c1c; border-radius: 20px; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; margin-bottom: 20px; }
+  .section-title { font-size: 1.05rem; font-weight: 700; border-left: 4px solid #334155; padding-left: 10px; margin: 32px 0 14px; }
+  .total-box { background: #1e293b; color: #fff; border-radius: 12px; padding: 18px 28px; display: inline-block; margin-bottom: 28px; }
+  .total-box .label { font-size: 0.78rem; opacity: 0.65; }
+  .total-box .amount { font-size: 2rem; font-weight: 700; letter-spacing: 1px; }
+  .total-box .delta { font-size: 0.8rem; color: #fca5a5; margin-top: 2px; }
+  .card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 6px; }
+  .chart-layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+  .donut-wrap { width: 240px; flex-shrink: 0; }
+  .bars-wrap { flex: 1; min-width: 280px; padding-top: 8px; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 11px; gap: 8px; }
+  .bar-label { width: 90px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .bar-track { flex: 1; background: #e5e7eb; border-radius: 5px; height: 22px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 5px; display: flex; align-items: center; padding-left: 7px; }
+  .bar-pct { font-size: 0.72rem; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-amount { font-size: 0.76rem; color: #555; width: 130px; text-align: right; }
+  .cat-block { margin-bottom: 20px; }
+  .cat-header { padding: 8px 12px; border-radius: 8px 8px 0 0; font-weight: 700; font-size: 0.88rem; color: #fff; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  th { background: #f8fafc; padding: 5px 10px; text-align: left; font-weight: 600; color: #64748b; border-bottom: 1px solid #e2e8f0; }
+  td { padding: 5px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+  tr:hover td { background: #f9fafb; }
+  .maru { color: #22c55e; font-weight: 700; }
+  .sankaku { color: #f97316; font-weight: 700; }
+  .batu { color: #ef4444; font-weight: 700; }
+  .sub td { font-weight: 700; background: #f8fafc; border-top: 2px solid #e2e8f0; }
+  .amt { text-align: right; font-variant-numeric: tabular-nums; }
+  .up { color: #16a34a; font-weight: 600; text-align: right; }
+  .dn { color: #dc2626; font-weight: 600; text-align: right; }
+  .wrap-tag { font-size: 0.68rem; background: #dbeafe; color: #1d4ed8; padding: 1px 6px; border-radius: 10px; margin-left: 4px; }
+  .group-sub td { background: #f0f9ff; border-top: 1px dashed #7dd3fc; border-bottom: 2px solid #bae6fd; font-size: 0.8rem; }
+  .group-sub:hover td { background: #e0f2fe; }
+  .gsub-name { color: #0369a1; font-weight: 700; font-style: italic; padding-left: 22px !important; }
+  .gsub-amt { text-align: right; font-weight: 700; color: #0369a1; }
+  .gsub-up { color: #16a34a; font-weight: 700; text-align: right; }
+  .gsub-dn { color: #dc2626; font-weight: 700; text-align: right; }
+  .wow-up { color: #16a34a; font-weight: 600; text-align: right; font-size: 0.76rem; white-space: nowrap; }
+  .wow-dn { color: #dc2626; font-weight: 600; text-align: right; font-size: 0.76rem; white-space: nowrap; }
+  .wow-zero { color: #94a3b8; text-align: right; font-size: 0.76rem; }
+  .gsub-wow-up { color: #16a34a; font-weight: 700; text-align: right; font-size: 0.76rem; }
+  .gsub-wow-dn { color: #dc2626; font-weight: 700; text-align: right; font-size: 0.76rem; }
+  .goal-grid { display: flex; flex-direction: column; gap: 13px; }
+  .goal-row { display: flex; align-items: center; gap: 8px; }
+  .goal-label { width: 88px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .goal-bars { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .goal-bar-row { display: flex; align-items: center; gap: 5px; }
+  .goal-tag { font-size: 0.67rem; width: 30px; color: #94a3b8; text-align: right; flex-shrink: 0; }
+  .goal-track { flex: 1; background: #e5e7eb; border-radius: 4px; height: 17px; position: relative; overflow: visible; }
+  .goal-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 5px; }
+  .goal-fill.target { opacity: 0.45; }
+  .gpct { font-size: 0.68rem; font-weight: 700; color: #fff; white-space: nowrap; }
+  .goal-yen { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 0.66rem; font-weight: 600; color: #555; white-space: nowrap; }
+  .goal-zero { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font-size: 0.68rem; color: #94a3b8; }
+  .goal-gap-row { display: flex; align-items: center; height: 14px; margin-left: 35px; padding-left: 5px; border-left: 2px solid #e2e8f0; }
+  .gv-badge { font-size: 0.66rem; font-weight: 700; padding: 1px 7px; border-radius: 10px; white-space: nowrap; }
+  .gv-badge.short { background: #fee2e2; color: #b91c1c; }
+  .gv-badge.over  { background: #dcfce7; color: #15803d; }
+  .gv-badge.neut  { background: #f1f5f9; color: #94a3b8; }
+  .gap-box { margin-top: 18px; padding: 12px 16px; background: #f8fafc; border-radius: 8px; font-size: 0.8rem; line-height: 1.75; }
+  .tech-layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+  .tech-donut { width: 220px; flex-shrink: 0; }
+  .tech-right { flex: 1; min-width: 280px; }
+  .tech-total-label { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+  .tech-sub { font-size: 0.78rem; color: #64748b; margin-bottom: 16px; }
+  .tech-legend { display: flex; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; }
+  .tech-bar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
+  .tech-bar-name { font-size: 0.74rem; width: 195px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tech-bar-track { flex: 1; background: #e5e7eb; border-radius: 4px; height: 16px; overflow: hidden; }
+  .tech-bar-fill { height: 100%; border-radius: 4px; }
+  .tech-bar-amt { font-size: 0.71rem; color: #555; width: 90px; text-align: right; }
+  .alert-box { margin-top: 16px; background: #f0fdf4; border-left: 4px solid #22c55e; padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 0.8rem; line-height: 1.65; }
+  .comment-box { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 16px 20px; margin-top: 28px; font-size: 0.82rem; line-height: 1.75; }
+  .comment-box h3 { font-size: 0.88rem; margin-bottom: 8px; color: #334155; }
 </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-  <h1>ポートフォリオ分析レポート 2026年06月23日</h1>
-  <div class="sub">投資資産合計（別管理含む）: ¥203,565,568　(20356.6万円)</div>
+<h1>&#128202; ポートフォリオ分類レポート</h1>
+<p class="subtitle">対象シート：06.24（井谷）　生成日：2026年6月23日</p>
+<span class="delta-badge">&#128201; 前週比（vs 06.17）&#165;362,318（-0.18%）　テック露出率 58.6%</span>
+<div class="total-box">
+  <div class="label">投資資産合計（別管理含む）</div>
+  <div class="amount">&#165;199,450,843</div>
+  <div class="delta">前回比（vs 06/23）&#165;4,114,725（-2.02%）　※ラップ専用コア計上済み・別管理&#165;3,165,862含む</div>
 </div>
 
+<div class="section-title">① 分類別の割合</div>
 <div class="card">
-<h2>① 分類別の割合</h2>
-<div class="grid2">
-  <div style="max-width:300px;margin:0 auto"><canvas id="donutChart"></canvas></div>
-  <div><div style="display:flex;align-items:center;margin-bottom:9px"><div style="width:14px;height:14px;border-radius:3px;background:#22c55e;margin-right:8px;flex-shrink:0"></div><div style="flex:1;font-size:0.82rem">コア</div><div style="text-align:right;font-size:0.82rem;margin-right:8px">¥47,424,797</div><div style="width:52px;text-align:right;font-size:0.82rem;font-weight:600;color:#22c55e">23.3%</div></div><div style="display:flex;align-items:center;margin-bottom:9px"><div style="width:14px;height:14px;border-radius:3px;background:#f97316;margin-right:8px;flex-shrink:0"></div><div style="flex:1;font-size:0.82rem">サテライト</div><div style="text-align:right;font-size:0.82rem;margin-right:8px">¥88,600,606</div><div style="width:52px;text-align:right;font-size:0.82rem;font-weight:600;color:#f97316">43.5%</div></div><div style="display:flex;align-items:center;margin-bottom:9px"><div style="width:14px;height:14px;border-radius:3px;background:#a855f7;margin-right:8px;flex-shrink:0"></div><div style="flex:1;font-size:0.82rem">分配金</div><div style="text-align:right;font-size:0.82rem;margin-right:8px">¥21,982,180</div><div style="width:52px;text-align:right;font-size:0.82rem;font-weight:600;color:#a855f7">10.8%</div></div><div style="display:flex;align-items:center;margin-bottom:9px"><div style="width:14px;height:14px;border-radius:3px;background:#ef4444;margin-right:8px;flex-shrink:0"></div><div style="flex:1;font-size:0.82rem">売却対象</div><div style="text-align:right;font-size:0.82rem;margin-right:8px">¥32,389,363</div><div style="width:52px;text-align:right;font-size:0.82rem;font-weight:600;color:#ef4444">15.9%</div></div><div style="display:flex;align-items:center;margin-bottom:9px"><div style="width:14px;height:14px;border-radius:3px;background:#f59e0b;margin-right:8px;flex-shrink:0"></div><div style="flex:1;font-size:0.82rem">流動枠</div><div style="text-align:right;font-size:0.82rem;margin-right:8px">¥9,950,302</div><div style="width:52px;text-align:right;font-size:0.82rem;font-weight:600;color:#f59e0b">4.9%</div></div><div style="display:flex;align-items:center;margin-bottom:9px"><div style="width:14px;height:14px;border-radius:3px;background:#94a3b8;margin-right:8px;flex-shrink:0"></div><div style="flex:1;font-size:0.82rem">別管理</div><div style="text-align:right;font-size:0.82rem;margin-right:8px">¥3,218,320</div><div style="width:52px;text-align:right;font-size:0.82rem;font-weight:600;color:#94a3b8">1.6%</div></div>
-  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:0.82rem;font-weight:700">投資資産合計（別管理含む）　¥203,565,568</div>
+  <div class="chart-layout">
+    <div class="donut-wrap"><canvas id="donutChart"></canvas></div>
+    <div class="bars-wrap">
+      <div class="bar-row"><div class="bar-label"><span class="dot" style="background:#22c55e"></span>コア</div><div class="bar-track"><div class="bar-fill" style="background:#22c55e;width:23.8%"><span class="bar-pct">23.8%</span></div></div><div class="bar-amount">&#165;47,413,622</div></div>
+      <div class="bar-row"><div class="bar-label"><span class="dot" style="background:#f97316"></span>サテライト</div><div class="bar-track"><div class="bar-fill" style="background:#f97316;width:43.2%"><span class="bar-pct">43.2%</span></div></div><div class="bar-amount">&#165;86,076,914</div></div>
+      <div class="bar-row"><div class="bar-label"><span class="dot" style="background:#a855f7"></span>分配金</div><div class="bar-track"><div class="bar-fill" style="background:#a855f7;width:11.1%"><span class="bar-pct">11.1%</span></div></div><div class="bar-amount">&#165;22,086,355</div></div>
+      <div class="bar-row"><div class="bar-label"><span class="dot" style="background:#ef4444"></span>売却対象</div><div class="bar-track"><div class="bar-fill" style="background:#ef4444;width:14.0%"><span class="bar-pct">14.0%</span></div></div><div class="bar-amount">&#165;28,008,750</div></div>
+      <div class="bar-row"><div class="bar-label"><span class="dot" style="background:#f59e0b"></span>流動枠</div><div class="bar-track"><div class="bar-fill" style="background:#f59e0b;width:6.4%"><span class="bar-pct">6.4%</span></div></div><div class="bar-amount">&#165;12,699,340</div></div>
+      <div class="bar-row"><div class="bar-label"><span class="dot" style="background:#94a3b8"></span>別管理</div><div class="bar-track"><div class="bar-fill" style="background:#94a3b8;width:1.6%"><span class="bar-pct">1.6%</span></div></div><div class="bar-amount">&#165;3,165,862</div></div>
+    </div>
   </div>
 </div>
-</div>
 
-<div class="card">
-<h2>② 銘柄別の内訳（損益率・前週比付き）</h2>
+<div class="section-title">② 銘柄別の内訳</div>
+<div class="cat-block">
+<div class="cat-header" style="background:#15803d;">&#127802; コア &#124; 長期の土台・真の分散</div>
 <table>
-<thead><tr>
-<th style="width:28px">マーク</th><th>銘柄名</th><th style="width:84px;text-align:right">前週比（¥）</th><th style="width:104px;text-align:right">評価額</th><th style="width:66px;text-align:right">損益率</th><th style="width:88px">口座</th>
-</tr></thead>
-<tbody>
-<tr style="background:#22c55e18"><td colspan="6" style="font-weight:700;color:#22c55e;padding:6px 8px;font-size:0.85rem">▌コア　合計 ¥47,424,797　(23.3%)</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>NF銀行業<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−36,630</td><td style="text-align:right">¥2,387,880</td><td class="pl-up" style="text-align:right">+90.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>iSSP500米国株<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+15,000</td><td style="text-align:right">¥2,185,000</td><td class="pl-up" style="text-align:right">+131.8%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>eMAXIS Slim 全世界株式<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+190,278</td><td style="text-align:right">¥9,461,505</td><td class="pl-up" style="text-align:right">+52.6%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>eMAXIS Slim 全世界株式<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券NISA</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+5,823</td><td style="text-align:right">¥1,377,008</td><td class="pl-up" style="text-align:right">+15.2%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券NISA</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>eMAXIS Slim 全世界株式<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券積NISA</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+4,431</td><td style="text-align:right">¥1,047,780</td><td class="pl-up" style="text-align:right">+49.7%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券積NISA</td></tr>
-<tr class="group-sub"><td></td><td class="gsub-name">└ eMAXIS Slim 全世界株式 合計（3口座）</td><td class="gsub-wow-up">+200,532</td><td class="gsub-amt">¥11,886,293</td><td class="gsub-up">+46.8%</td><td></td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>SBI・V・S&P500<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−939</td><td style="text-align:right">¥9,550,996</td><td class="pl-up" style="text-align:right">+129.6%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>SBI・V・S&P500<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券積NISA</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−188</td><td style="text-align:right">¥1,912,436</td><td class="pl-up" style="text-align:right">+36.6%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券積NISA</td></tr>
-<tr class="group-sub"><td></td><td class="gsub-name">└ SBI・V・S&P500 合計（2口座）</td><td class="gsub-wow-dn">−1,127</td><td class="gsub-amt">¥11,463,432</td><td class="gsub-up">+106.2%</td><td></td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>eMAXIS NASDAQ100インデックス<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券NISA</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+19,753</td><td style="text-align:right">¥5,384,916</td><td class="pl-up" style="text-align:right">+49.8%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券NISA</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>レバチョイス（ラップ専用）<span class="wrap-tag">ラップ</span><br><span style="font-size:0.72rem;color:#94a3b8">SBI証券ラップ</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+158,078</td><td style="text-align:right">¥5,640,982</td><td class="pl-up" style="text-align:right">+12.8%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券ラップ</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>AI投資（ラップ専用）<span class="wrap-tag">ラップ</span><br><span style="font-size:0.72rem;color:#94a3b8">SBI証券ラップ</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+18,876</td><td style="text-align:right">¥8,476,294</td><td class="pl-up" style="text-align:right">+69.5%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券ラップ</td></tr>
-<tr style="background:#f9731618"><td colspan="6" style="font-weight:700;color:#f97316;padding:6px 8px;font-size:0.85rem">▌サテライト　合計 ¥88,600,606　(43.5%)</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>GX革新優良企業<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+34,200</td><td style="text-align:right">¥2,964,600</td><td class="pl-up" style="text-align:right">+58.2%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>上場日経半導体<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+522,600</td><td style="text-align:right">¥7,852,000</td><td class="pl-up" style="text-align:right">+230.1%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>GX半導体<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+285,600</td><td style="text-align:right">¥6,613,200</td><td class="pl-up" style="text-align:right">+180.6%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>GXUSテック20<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+71,500</td><td style="text-align:right">¥4,706,000</td><td class="pl-up" style="text-align:right">+82.9%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>iFreeNEXT FANG+（上場ETF）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+24,750</td><td style="text-align:right">¥1,438,250</td><td class="pl-up" style="text-align:right">+27.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>DGRW（ウィズダムツリー配当成長）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+91,367</td><td style="text-align:right">¥10,355,286</td><td class="pl-up" style="text-align:right">+65.0%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>インベスコQQQ<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+558,586</td><td style="text-align:right">¥20,520,352</td><td class="pl-up" style="text-align:right">+135.1%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>QTEC<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+108,937</td><td style="text-align:right">¥2,713,954</td><td class="pl-up" style="text-align:right">+77.9%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>iFreeNEXT FANG+<br><span style="font-size:0.72rem;color:#94a3b8">紀陽銀行</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+344,034</td><td style="text-align:right">¥8,891,895</td><td class="pl-up" style="text-align:right">+52.0%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">紀陽銀行</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>Tracers NASDAQ100ゴールドプラス<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−267,802</td><td style="text-align:right">¥12,554,574</td><td class="pl-up" style="text-align:right">+76.1%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>Zテック20<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+48,798</td><td style="text-align:right">¥4,166,352</td><td class="pl-up" style="text-align:right">+4.2%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>一歩先いくUSテック・トップ20<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−9,886</td><td style="text-align:right">¥3,531,777</td><td class="pl-up" style="text-align:right">+76.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>一歩先いくUSテック・トップ20<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券NISA</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−3,337</td><td style="text-align:right">¥1,192,087</td><td class="pl-up" style="text-align:right">+99.3%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券NISA</td></tr>
-<tr class="group-sub"><td></td><td class="gsub-name">└ 一歩先いくUSテック・トップ20 合計（2口座）</td><td class="gsub-wow-dn">−13,223</td><td class="gsub-amt">¥4,723,864</td><td class="gsub-up">+81.7%</td><td></td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>iFreeNEXT FANG+（積NISA）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券積NISA</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+6,436</td><td style="text-align:right">¥1,100,279</td><td class="pl-up" style="text-align:right">+29.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券積NISA</td></tr>
-<tr style="background:#a855f718"><td colspan="6" style="font-weight:700;color:#a855f7;padding:6px 8px;font-size:0.85rem">▌分配金　合計 ¥21,982,180　(10.8%)</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>iS米国連続増配株<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−1,200</td><td style="text-align:right">¥308,800</td><td class="pl-up" style="text-align:right">+52.9%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>WCM世界成長株（予想分配金提示型）<br><span style="font-size:0.72rem;color:#94a3b8">紀陽銀行</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+545,910</td><td style="text-align:right">¥9,847,689</td><td class="pl-dn" style="text-align:right">-1.5%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">紀陽銀行</td></tr>
-<tr><td style="text-align:center;color:#64748b">○</td><td>WCM世界成長株（予想分配金提示型）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+221,128</td><td style="text-align:right">¥9,926,423</td><td class="pl-up" style="text-align:right">+6.9%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr class="group-sub"><td></td><td class="gsub-name">└ WCM世界成長株（予想分配金提示型） 合計（2口座）</td><td class="gsub-wow-up">+767,038</td><td class="gsub-amt">¥19,774,112</td><td class="gsub-up">+2.5%</td><td></td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>SBI欧州高配当株式（分配）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+7,730</td><td style="text-align:right">¥1,469,319</td><td class="pl-up" style="text-align:right">+31.7%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>SBI欧州高配当株式（分配）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券NISA</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−3,578</td><td style="text-align:right">¥429,949</td><td class="pl-up" style="text-align:right">+42.6%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券NISA</td></tr>
-<tr class="group-sub"><td></td><td class="gsub-name">└ SBI欧州高配当株式（分配） 合計（2口座）</td><td class="gsub-wow-up">+4,152</td><td class="gsub-amt">¥1,899,268</td><td class="gsub-up">+34.0%</td><td></td></tr>
-<tr style="background:#f59e0b18"><td colspan="6" style="font-weight:700;color:#f59e0b;padding:6px 8px;font-size:0.85rem">▌流動枠　合計 ¥9,950,302　(4.9%)</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>エヌビディア（NVDA）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+111,737</td><td style="text-align:right">¥4,385,217</td><td class="pl-up" style="text-align:right">+107.8%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>パランティア（PLTR）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−282,800</td><td style="text-align:right">¥3,284,326</td><td class="pl-up" style="text-align:right">+15.5%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>ソーファイ（SOFI）<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−27,735</td><td style="text-align:right">¥2,280,759</td><td class="pl-up" style="text-align:right">+12.9%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr style="background:#ef444418"><td colspan="6" style="font-weight:700;color:#ef4444;padding:6px 8px;font-size:0.85rem">▌売却対象　合計 ¥32,389,363　(15.9%)</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>iFナス100ダブル<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+40,110</td><td style="text-align:right">¥1,688,190</td><td class="pl-up" style="text-align:right">+40.2%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>GX防衛テック<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−29,600</td><td style="text-align:right">¥826,400</td><td class="pl-dn" style="text-align:right">-15.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>iFFANGゴールド<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−24,000</td><td style="text-align:right">¥1,425,000</td><td class="pl-dn" style="text-align:right">-0.2%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>SOXL<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+884,844</td><td style="text-align:right">¥3,890,038</td><td class="pl-up" style="text-align:right">+818.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>iFreeレバレッジS&P500<br><span style="font-size:0.72rem;color:#94a3b8">紀陽銀行</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+389,360</td><td style="text-align:right">¥13,582,604</td><td class="pl-up" style="text-align:right">+126.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">紀陽銀行</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>グローバル・フィンテック株式ファンド<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+4,713</td><td style="text-align:right">¥1,702,783</td><td class="pl-dn" style="text-align:right">-14.9%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">△</td><td>iFreeレバレッジFANG+<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−11,328</td><td style="text-align:right">¥5,383,561</td><td class="pl-up" style="text-align:right">+54.3%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>auAMレバレッジNASDAQ100<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−1,375</td><td style="text-align:right">¥3,890,787</td><td class="pl-up" style="text-align:right">+94.5%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr style="background:#94a3b818"><td colspan="6" style="font-weight:700;color:#94a3b8;padding:6px 8px;font-size:0.85rem">▌別管理　合計 ¥3,218,320　(1.6%)</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>iSゴールド<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券</span></td><td class="wow-dn" style="text-align:right;white-space:nowrap">−48,000</td><td style="text-align:right">¥1,926,600</td><td class="pl-dn" style="text-align:right">-6.4%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>SBI・iシェアーズ・インド株式<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券NISA</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+5,554</td><td style="text-align:right">¥308,043</td><td class="pl-up" style="text-align:right">+2.7%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券NISA</td></tr>
-<tr><td style="text-align:center;color:#64748b">×</td><td>AB米国成長株<br><span style="font-size:0.72rem;color:#94a3b8">SBI証券NISA</span></td><td class="wow-up" style="text-align:right;white-space:nowrap">+738</td><td style="text-align:right">¥983,677</td><td class="pl-up" style="text-align:right">+6.2%</td><td style="text-align:center;font-size:0.72rem;color:#94a3b8">SBI証券NISA</td></tr></tbody>
-</table>
-</div>
+<tr><th>評価</th><th>銘柄名</th><th>口座</th><th class="amt">評価額</th><th class="amt">前週比（&#165;）</th><th class="amt">損益率</th></tr>
+<tr><td class="maru">&#9675;</td><td>NF銀行業（1615）</td><td>SBI証券</td><td class="amt">2,345,310</td><td class="wow-dn">&minus;42,570</td><td class="up">+87.0%</td></tr>
+<tr><td class="maru">&#9675;</td><td>iSSP500米国株（1655）</td><td>SBI証券</td><td class="amt">2,156,500</td><td class="wow-dn">&minus;28,500</td><td class="up">+128.8%</td></tr>
+<tr><td class="maru">&#9675;</td><td>eMAXIS Slim 全世界株式</td><td>SBI証券（特定）</td><td class="amt">9,544,217</td><td class="wow-zero">&#8212;</td><td class="up">+51.5%</td></tr>
+<tr><td class="maru">&#9675;</td><td>eMAXIS Slim 全世界株式</td><td>SBI証券NISA</td><td class="amt">1,374,492</td><td class="wow-dn">&minus;2,516</td><td class="up">+15.0%</td></tr>
+<tr><td class="maru">&#9675;</td><td>eMAXIS Slim 全世界株式</td><td>SBI証券積NISA</td><td class="amt">1,045,865</td><td class="wow-dn">&minus;1,915</td><td class="up">+49.4%</td></tr>
+<tr class="group-sub"><td></td><td class="gsub-name">&#9492; eMAXIS Slim 全世界株式 合計（3口座）</td><td></td><td class="gsub-amt">11,964,574</td><td class="gsub-wow-up">+9,539,786</td><td class="gsub-up">+46.0%</td></tr>
+<tr><td class="maru">&#9675;</td><td>SBI・V・S&P500</td><td>SBI証券（特定）</td><td class="amt">9,524,931</td><td class="wow-zero">&#8212;</td><td class="up">+129.0%</td></tr>
+<tr><td class="maru">&#9675;</td><td>SBI・V・S&P500</td><td>SBI証券積NISA</td><td class="amt">1,907,217</td><td class="wow-dn">&minus;5,219</td><td class="up">+36.2%</td></tr>
+<tr class="group-sub"><td></td><td class="gsub-name">&#9492; SBI・V・S&P500 合計（2口座）</td><td></td><td class="gsub-amt">11,432,148</td><td class="gsub-wow-up">+9,519,712</td><td class="gsub-up">+105.6%</td></tr>
+<tr><td class="maru">&#9675;</td><td>eMAXIS NASDAQ100インデックス</td><td>SBI証券NISA</td><td class="amt">5,375,551</td><td class="wow-dn">&minus;9,365</td><td class="up">+49.5%</td></tr>
+<tr><td class="maru">&#9675;</td><td>レバチョイス（ラップ専用）<span class="wrap-tag">ラップ</span></td><td>SBI証券</td><td class="amt">5,640,982</td><td class="wow-zero">&#8212;</td><td class="up">+12.8%</td></tr>
+<tr><td class="maru">&#9675;</td><td>AI投資（ラップ専用）<span class="wrap-tag">ラップ</span></td><td>SBI証券</td><td class="amt">8,498,557</td><td class="wow-up">+22,263</td><td class="up">+70.0%</td></tr>
+<tr class="sub"><td colspan="3">小計</td><td class="amt">47,413,622（23.8%）</td><td></td><td></td></tr>
+</table></div><div class="cat-block">
+<div class="cat-header" style="background:#c2410c;">&#127825; サテライト &#124; テック集中・60歳まで攻める枠</div>
+<table>
+<tr><th>評価</th><th>銘柄名</th><th>口座</th><th class="amt">評価額</th><th class="amt">前週比（&#165;）</th><th class="amt">損益率</th></tr>
+<tr><td class="sankaku">&#9651;</td><td>GX革新優良企業（178A）</td><td>SBI証券</td><td class="amt">2,860,200</td><td class="wow-dn">&minus;104,400</td><td class="up">+52.6%</td></tr>
+<tr><td class="sankaku">&#9651;</td><td>上場日経半導体（213A）</td><td>SBI証券</td><td class="amt">7,130,500</td><td class="wow-dn">&minus;721,500</td><td class="up">+199.7%</td></tr>
+<tr><td class="sankaku">&#9651;</td><td>GX半導体（2243）</td><td>SBI証券</td><td class="amt">6,430,800</td><td class="wow-dn">&minus;182,400</td><td class="up">+172.9%</td></tr>
+<tr><td class="maru">&#9675;</td><td>GXUSテック20（2244）</td><td>SBI証券</td><td class="amt">4,564,300</td><td class="wow-dn">&minus;141,700</td><td class="up">+77.4%</td></tr>
+<tr><td class="batu">&#215;</td><td>iFreeNEXT FANG+（上場ETF 316A）</td><td>SBI証券</td><td class="amt">1,377,750</td><td class="wow-dn">&minus;60,500</td><td class="up">+22.1%</td></tr>
+<tr><td class="batu">&#215;</td><td>DGRW（ウィズダムツリー配当成長）</td><td>SBI証券</td><td class="amt">10,257,427</td><td class="wow-dn">&minus;97,859</td><td class="up">+63.5%</td></tr>
+<tr><td class="maru">&#9675;</td><td>インベスコQQQ（QQQ）</td><td>SBI証券</td><td class="amt">19,839,726</td><td class="wow-dn">&minus;680,626</td><td class="up">+127.3%</td></tr>
+<tr><td class="batu">&#215;</td><td>FT NASDAQ100テクノロジーセクターETF（QTEC）</td><td>SBI証券</td><td class="amt">2,585,918</td><td class="wow-dn">&minus;128,036</td><td class="up">+69.5%</td></tr>
+<tr><td class="maru">&#9675;</td><td>iFreeNEXT FANG+（紀陽）</td><td>紀陽銀行</td><td class="amt">8,891,895</td><td class="wow-zero">&#8212;</td><td class="up">+52.0%</td></tr>
+<tr><td class="maru">&#9675;</td><td>iFreeNEXT FANG+（積NISA）</td><td>SBI証券積NISA</td><td class="amt">1,071,598</td><td class="wow-dn">&minus;28,681</td><td class="up">+26.1%</td></tr>
+<tr class="group-sub"><td></td><td class="gsub-name">&#9492; iFreeNEXT FANG+（紀陽） 合計（2口座）</td><td></td><td class="gsub-amt">9,963,493</td><td class="gsub-wow-dn">&minus;28,681</td><td class="gsub-up">+48.7%</td></tr>
+<tr><td class="maru">&#9675;</td><td>Tracers NASDAQ100ゴールドプラス</td><td>SBI証券</td><td class="amt">12,402,084</td><td class="wow-dn">&minus;152,490</td><td class="up">+73.9%</td></tr>
+<tr><td class="sankaku">&#9651;</td><td>Zテック20（iFreePlus）</td><td>SBI証券</td><td class="amt">4,083,234</td><td class="wow-dn">&minus;83,118</td><td class="up">+2.1%</td></tr>
+<tr><td class="maru">&#9675;</td><td>一歩先いくUSテック・トップ20</td><td>SBI証券（特定）</td><td class="amt">3,425,326</td><td class="wow-zero">&#8212;</td><td class="up">+71.1%</td></tr>
+<tr><td class="maru">&#9675;</td><td>一歩先いくUSテック・トップ20</td><td>SBI証券NISA</td><td class="amt">1,156,156</td><td class="wow-dn">&minus;35,931</td><td class="up">+93.3%</td></tr>
+<tr class="group-sub"><td></td><td class="gsub-name">&#9492; 一歩先いくUSテック・トップ20 合計（2口座）</td><td></td><td class="gsub-amt">4,581,482</td><td class="gsub-wow-up">+3,389,395</td><td class="gsub-up">+76.2%</td></tr>
+<tr class="sub"><td colspan="3">小計</td><td class="amt">86,076,914（43.2%）</td><td></td><td></td></tr>
+</table></div><div class="cat-block">
+<div class="cat-header" style="background:#7e22ce;">&#128994; 分配金 &#124; フェーズ2のインカム源（上限目安&#165;30M）</div>
+<table>
+<tr><th>評価</th><th>銘柄名</th><th>口座</th><th class="amt">評価額</th><th class="amt">前週比（&#165;）</th><th class="amt">損益率</th></tr>
+<tr><td class="maru">&#9675;</td><td>iS米国連続増配株（2014）</td><td>SBI証券</td><td class="amt">309,100</td><td class="wow-up">+300</td><td class="up">+53.0%</td></tr>
+<tr><td class="maru">&#9675;</td><td>WCM世界成長株（予想分配金提示型）</td><td>紀陽銀行</td><td class="amt">9,847,689</td><td class="wow-zero">&#8212;</td><td class="dn">&minus;1.5%</td></tr>
+<tr><td class="maru">&#9675;</td><td>WCM世界成長株（予想分配金提示型）</td><td>SBI証券</td><td class="amt">10,029,616</td><td class="wow-up">+103,193</td><td class="up">+8.0%</td></tr>
+<tr class="group-sub"><td></td><td class="gsub-name">&#9492; WCM世界成長株（予想分配金提示型） 合計（2口座）</td><td></td><td class="gsub-amt">19,877,305</td><td class="gsub-wow-up">+103,193</td><td class="gsub-up">+3.1%</td></tr>
+<tr><td class="batu">&#215;</td><td>SBI欧州高配当株式（分配）</td><td>SBI証券（特定）</td><td class="amt">1,469,846</td><td class="wow-zero">&#8212;</td><td class="up">+31.8%</td></tr>
+<tr><td class="batu">&#215;</td><td>SBI欧州高配当株式（分配）</td><td>SBI証券NISA</td><td class="amt">430,104</td><td class="wow-up">+155</td><td class="up">+42.7%</td></tr>
+<tr class="group-sub"><td></td><td class="gsub-name">&#9492; SBI欧州高配当株式（分配） 合計（2口座）</td><td></td><td class="gsub-amt">1,899,950</td><td class="gsub-wow-up">+1,470,001</td><td class="gsub-up">+34.1%</td></tr>
+<tr class="sub"><td colspan="3">小計（上限&#165;30Mまで残り&#165;791M）</td><td class="amt">22,086,355（11.1%）</td><td></td><td></td></tr>
+</table></div><div class="cat-block">
+<div class="cat-header" style="background:#b91c1c;">&#128308; 売却対象 &#124; 整理してコアへ（合計&#165;2,801M）</div>
+<table>
+<tr><th>評価</th><th>銘柄名</th><th>口座</th><th class="amt">評価額</th><th class="amt">前週比（&#165;）</th><th class="amt">損益率</th></tr>
+<tr><td class="batu">&#215;</td><td>iFナス100ダブル（2869）</td><td>SBI証券</td><td class="amt">1,609,860</td><td class="wow-dn">&minus;78,330</td><td class="up">+33.7%</td></tr>
+<tr><td class="batu">&#215;</td><td>GX防衛テック（466A）</td><td>SBI証券</td><td class="amt">808,800</td><td class="wow-dn">&minus;17,600</td><td class="dn">&minus;17.2%</td></tr>
+<tr><td class="sankaku">&#9651;</td><td>iFFANGゴールド（521A）</td><td>SBI証券</td><td class="amt">1,346,250</td><td class="wow-dn">&minus;78,750</td><td class="dn">&minus;5.7%</td></tr>
+<tr><td class="sankaku">&#9651;</td><td>iFreeレバレッジS&P500</td><td>紀陽銀行</td><td class="amt">13,582,604</td><td class="wow-zero">&#8212;</td><td class="up">+126.4%</td></tr>
+<tr><td class="batu">&#215;</td><td>グローバル・フィンテック株式ファンド</td><td>SBI証券</td><td class="amt">1,675,448</td><td class="wow-dn">&minus;27,335</td><td class="dn">&minus;16.2%</td></tr>
+<tr><td class="sankaku">&#9651;</td><td>iFreeレバレッジFANG+</td><td>SBI証券</td><td class="amt">5,110,639</td><td class="wow-dn">&minus;272,922</td><td class="up">+46.4%</td></tr>
+<tr><td class="batu">&#215;</td><td>auAMレバレッジNASDAQ100</td><td>SBI証券</td><td class="amt">3,875,149</td><td class="wow-dn">&minus;15,638</td><td class="up">+93.8%</td></tr>
+<tr class="sub"><td colspan="3">小計</td><td class="amt">28,008,750（14.0%）</td><td></td><td></td></tr>
+</table></div><div class="cat-block">
+<div class="cat-header" style="background:#b45309;">&#127921; 流動枠　合計&#165;12,699,340</div>
+<table>
+<tr><th>評価</th><th>銘柄名</th><th>口座</th><th class="amt">評価額</th><th class="amt">前週比（&#165;）</th><th class="amt">損益率</th></tr>
+<tr><td class="batu">&#215;</td><td>エヌビディア（NVDA）</td><td>SBI証券</td><td class="amt">4,202,380</td><td class="wow-dn">&minus;182,837</td><td class="up">+99.1%</td></tr>
+<tr><td class="batu">&#215;</td><td>パランティア（PLTR）</td><td>SBI証券</td><td class="amt">3,206,577</td><td class="wow-dn">&minus;77,749</td><td class="up">+12.8%</td></tr>
+<tr><td class="batu">&#215;</td><td>ソーファイ（SOFI）</td><td>SBI証券</td><td class="amt">2,305,530</td><td class="wow-up">+24,771</td><td class="up">+14.1%</td></tr>
+<tr><td class="sankaku">&#9651;</td><td>SOXL（Direxion半導体株ブル3倍ETF）</td><td>SBI証券</td><td class="amt">2,984,853</td><td class="wow-dn">&minus;905,185</td><td class="up">+604.9%</td></tr>
+<tr class="sub"><td colspan="3">小計</td><td class="amt">12,699,340（6.4%）</td><td></td><td></td></tr>
+</table></div><div class="cat-block">
+<div class="cat-header" style="background:#475569;">&#11036; 別管理（集計外）</div>
+<table>
+<tr><th>評価</th><th>銘柄名</th><th>口座</th><th class="amt">評価額</th><th class="amt">前週比（&#165;）</th><th class="amt">損益率</th><th>メモ</th></tr>
+<tr><td class="batu">&#215;</td><td>iSゴールド（314A）</td><td>SBI証券</td><td class="amt">1,888,200</td><td class="wow-dn">&minus;38,400</td><td class="dn">&minus;8.2%</td><td>相場次第で柔軟対応</td></tr>
+<tr><td class="batu">&#215;</td><td>SBI・iシェアーズ・インド株式（NISA）</td><td>SBI証券NISA</td><td class="amt">305,550</td><td class="wow-dn">&minus;2,493</td><td class="up">+1.8%</td><td>NISA終了（約2年後）に売却</td></tr>
+<tr><td class="batu">&#215;</td><td>アライアンス・バーンスタイン米国成長株（NISA）</td><td>SBI証券NISA</td><td class="amt">972,112</td><td class="wow-dn">&minus;11,565</td><td class="up">+5.0%</td><td>NISA終了（約2年後）に売却</td></tr>
+<tr class="sub"><td colspan="3">小計</td><td class="amt">3,165,862（1.6%）</td><td></td><td></td><td></td></tr>
+</table></div>
 
+<div class="section-title">③ 現状 &#8594; 60歳ゴール 比較</div>
 <div class="card">
-<h2>③ 現状 → 60歳ゴール比較</h2>
-<div style="font-size:0.72rem;color:#94a3b8;margin-bottom:12px">凡例: ■ 現状（濃色）　■ ゴール（薄色）</div>
-
-<div style="display:flex;align-items:center;margin-bottom:4px">
-  <div style="width:64px;font-size:0.78rem;color:#374151;text-align:right;padding-right:8px">コア</div>
-  <div class="goal-track">
-    <div class="goal-fill" style="width:29.1%;height:100%;background:#22c55e;border-radius:4px;position:relative">
-      <div class="goal-yen">¥47,424,797</div>
-    </div>
-    <div class="goal-fill target" style="position:absolute;top:0;width:75.0%;height:100%;background:#22c55e;border-radius:4px;">
-      
-    </div>
-  </div>
-  <div style="width:44px;text-align:right;font-size:0.78rem;color:#374151;padding-left:6px">23.3%</div>
-</div>
-<div class="goal-gap-row"><span class="gv-badge short">不足 -36.7%</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:6px">ゴール 60% / ¥122,139,341</span></div>
-<div style="display:flex;align-items:center;margin-bottom:4px">
-  <div style="width:64px;font-size:0.78rem;color:#374151;text-align:right;padding-right:8px">サテライト</div>
-  <div class="goal-track">
-    <div class="goal-fill" style="width:54.4%;height:100%;background:#f97316;border-radius:4px;position:relative">
-      <div class="goal-yen">¥88,600,606</div>
-    </div>
-    <div class="goal-fill target" style="position:absolute;top:0;width:25.0%;height:100%;background:#f97316;border-radius:4px;">
-      
-    </div>
-  </div>
-  <div style="width:44px;text-align:right;font-size:0.78rem;color:#374151;padding-left:6px">43.5%</div>
-</div>
-<div class="goal-gap-row"><span class="gv-badge over">超過 +23.5%</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:6px">ゴール 20% / ¥40,713,114</span></div>
-<div style="display:flex;align-items:center;margin-bottom:4px">
-  <div style="width:64px;font-size:0.78rem;color:#374151;text-align:right;padding-right:8px">分配金</div>
-  <div class="goal-track">
-    <div class="goal-fill" style="width:13.5%;height:100%;background:#a855f7;border-radius:4px;position:relative">
-      <div class="goal-yen">¥21,982,180</div>
-    </div>
-    <div class="goal-fill target" style="position:absolute;top:0;width:12.5%;height:100%;background:#a855f7;border-radius:4px;">
-      
-    </div>
-  </div>
-  <div style="width:44px;text-align:right;font-size:0.78rem;color:#374151;padding-left:6px">10.8%</div>
-</div>
-<div class="goal-gap-row"><span class="gv-badge over">超過 +0.8%</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:6px">ゴール 10% / ¥20,356,557</span></div>
-<div style="display:flex;align-items:center;margin-bottom:4px">
-  <div style="width:64px;font-size:0.78rem;color:#374151;text-align:right;padding-right:8px">流動枠</div>
-  <div class="goal-track">
-    <div class="goal-fill" style="width:6.1%;height:100%;background:#f59e0b;border-radius:4px;position:relative">
-      <div class="goal-yen">¥9,950,302</div>
-    </div>
-    <div class="goal-fill target" style="position:absolute;top:0;width:12.5%;height:100%;background:#f59e0b;border-radius:4px;">
-      
+  <div style="font-size:0.76rem;color:#94a3b8;margin-bottom:14px;">&#9632; 現状（濃色）　&#9632; ゴール（薄色）</div>
+  <div class="goal-grid">
+    <div class="goal-row">
+      <div class="goal-label"><span class="dot" style="background:#22c55e"></span>コア</div>
+      <div class="goal-bars">
+        <div class="goal-bar-row"><div class="goal-tag">現状</div><div class="goal-track"><div class="goal-fill" style="background:#22c55e;width:23.8%"><span class="gpct">23.8%</span></div><span class="goal-yen">&#165;47,413,622</span></div></div>
+        <div class="goal-gap-row"><span class="gv-badge short">&#9660; 不足 &#165;72,256,883</span></div>
+        <div class="goal-bar-row"><div class="goal-tag">ゴール</div><div class="goal-track"><div class="goal-fill target" style="background:#22c55e;width:60.0%"><span class="gpct">60%</span></div><span class="goal-yen">&#165;119,670,505</span></div></div>
+      </div>
+    </div>    <div class="goal-row">
+      <div class="goal-label"><span class="dot" style="background:#f97316"></span>サテライト</div>
+      <div class="goal-bars">
+        <div class="goal-bar-row"><div class="goal-tag">現状</div><div class="goal-track"><div class="goal-fill" style="background:#f97316;width:43.2%"><span class="gpct">43.2%</span></div><span class="goal-yen">&#165;86,076,914</span></div></div>
+        <div class="goal-gap-row"><span class="gv-badge over">&#9650; 超過 &#165;46,186,745</span></div>
+        <div class="goal-bar-row"><div class="goal-tag">ゴール</div><div class="goal-track"><div class="goal-fill target" style="background:#f97316;width:20.0%"><span class="gpct">20%</span></div><span class="goal-yen">&#165;39,890,168</span></div></div>
+      </div>
+    </div>    <div class="goal-row">
+      <div class="goal-label"><span class="dot" style="background:#a855f7"></span>分配金</div>
+      <div class="goal-bars">
+        <div class="goal-bar-row"><div class="goal-tag">現状</div><div class="goal-track"><div class="goal-fill" style="background:#a855f7;width:11.1%"><span class="gpct">11.1%</span></div><span class="goal-yen">&#165;22,086,355</span></div></div>
+        <div class="goal-gap-row"><span class="gv-badge over">&#9650; 超過 &#165;2,141,270</span></div>
+        <div class="goal-bar-row"><div class="goal-tag">ゴール</div><div class="goal-track"><div class="goal-fill target" style="background:#a855f7;width:10.0%"><span class="gpct">10%</span></div><span class="goal-yen">&#165;19,945,084</span></div></div>
+      </div>
+    </div>    <div class="goal-row">
+      <div class="goal-label"><span class="dot" style="background:#ef4444"></span>売却対象</div>
+      <div class="goal-bars">
+        <div class="goal-bar-row"><div class="goal-tag">現状</div><div class="goal-track"><div class="goal-fill" style="background:#ef4444;width:14.0%"><span class="gpct">14.0%</span></div><span class="goal-yen">&#165;28,008,750</span></div></div>
+        <div class="goal-gap-row"><span class="gv-badge over">&#9650; 超過 &#165;28,008,750</span></div>
+        <div class="goal-bar-row"><div class="goal-tag">ゴール</div><div class="goal-track"><span class="goal-zero">0%</span><span class="goal-yen" style="color:#94a3b8;">&#165;0</span></div></div>
+      </div>
+    </div>    <div class="goal-row">
+      <div class="goal-label"><span class="dot" style="background:#f59e0b"></span>流動枠</div>
+      <div class="goal-bars">
+        <div class="goal-bar-row"><div class="goal-tag">現状</div><div class="goal-track"><div class="goal-fill" style="background:#f59e0b;width:6.4%"><span class="gpct">6.4%</span></div><span class="goal-yen">&#165;12,699,340</span></div></div>
+        <div class="goal-gap-row"><span class="gv-badge short">&#9660; 不足 &#165;7,245,744</span></div>
+        <div class="goal-bar-row"><div class="goal-tag">ゴール</div><div class="goal-track"><div class="goal-fill target" style="background:#f59e0b;width:10.0%"><span class="gpct">10%</span></div><span class="goal-yen">&#165;19,945,084</span></div></div>
+      </div>
+    </div>    <div class="goal-row">
+      <div class="goal-label"><span class="dot" style="background:#94a3b8"></span>別管理</div>
+      <div class="goal-bars">
+        <div class="goal-bar-row"><div class="goal-tag">現状</div><div class="goal-track"><div class="goal-fill" style="background:#94a3b8;width:1.6%"><span class="gpct">1.6%</span></div><span class="goal-yen">&#165;3,165,862</span></div></div>
+        <div class="goal-gap-row"><span class="gv-badge neut">分類外</span></div>
+        <div class="goal-bar-row"><div class="goal-tag">ゴール</div><div class="goal-track"><span class="goal-zero">0%</span><span class="goal-yen" style="color:#94a3b8;">&#165;0</span></div></div>
+      </div>
     </div>
   </div>
-  <div style="width:44px;text-align:right;font-size:0.78rem;color:#374151;padding-left:6px">4.9%</div>
-</div>
-<div class="goal-gap-row"><span class="gv-badge short">不足 -5.1%</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:6px">ゴール 10% / ¥20,356,557</span></div>
-<div style="display:flex;align-items:center;margin-bottom:4px">
-  <div style="width:64px;font-size:0.78rem;color:#374151;text-align:right;padding-right:8px">売却対象</div>
-  <div class="goal-track">
-    <div class="goal-fill" style="width:19.9%;height:100%;background:#ef4444;border-radius:4px;position:relative">
-      <div class="goal-yen">¥32,389,363</div>
-    </div>
-    <div class="goal-fill target" style="position:absolute;top:0;width:0.0%;height:100%;background:#ef4444;border-radius:4px;">
-      <div class="goal-zero">0%</div>
-    </div>
+  <div class="gap-box">
+    <strong>ギャップサマリー</strong><br>
+    コア：23.8%　ゴール60%まで<strong>&#9660;&#165;7,226M不足</strong><br>
+    サテライト：43.2%　ゴール20%に対し<strong>&#9650;&#165;4,619M超過</strong><br>
+    分配金：11.1%　ゴール10%に対し<strong>&#9650;&#165;214M超過</strong><br>
+    売却対象：14.0%　<strong>&#9650;&#165;2,801M超過</strong><br>
+    流動枠：6.4%　ゴール10%まで<strong>&#9660;&#165;725M不足</strong><br>
+    別管理：1.6%（&#165;3,165,862）集計に包含・分類外
   </div>
-  <div style="width:44px;text-align:right;font-size:0.78rem;color:#374151;padding-left:6px">15.9%</div>
-</div>
-<div class="goal-gap-row"><span class="gv-badge over">超過 +15.9%</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:6px">ゴール 0% / ¥0</span></div>
-<div style="display:flex;align-items:center;margin-bottom:4px">
-  <div style="width:64px;font-size:0.78rem;color:#374151;text-align:right;padding-right:8px">別管理</div>
-  <div class="goal-track">
-    <div class="goal-fill" style="width:2.0%;height:100%;background:#94a3b8;border-radius:4px;position:relative">
-      <div class="goal-yen">¥3,218,320</div>
-    </div>
-    <div class="goal-fill target" style="position:absolute;top:0;width:0.0%;height:100%;background:#94a3b8;border-radius:4px;">
-      <div class="goal-zero">0%</div>
-    </div>
-  </div>
-  <div style="width:44px;text-align:right;font-size:0.78rem;color:#374151;padding-left:6px">1.6%</div>
-</div>
-<div class="goal-gap-row"><span class="gv-badge neut">分類外</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:6px">ゴール 0% / ¥0</span></div>
 </div>
 
+<div class="section-title">⑤ 投資金額推移（分類別積み上げ面グラフ）</div>
 <div class="card">
-<h2>④ 実質テック露出率</h2>
-<div class="grid2">
-  <div>
-    <canvas id="techDonut" style="max-height:240px"></canvas>
-    <div style="text-align:center;margin-top:8px;font-size:1.4rem;font-weight:700;color:#f97316">59.4%</div>
-    <div style="text-align:center;font-size:0.72rem;color:#94a3b8">目安：55〜60%</div>
+  <div style="position:relative;height:420px;"><canvas id="trendChart"></canvas></div>
+  <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;justify-content:center;">
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.76rem;font-weight:600;"><div style="width:13px;height:9px;border-radius:2px;background:rgba(34,197,94,0.7)"></div>コア</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.76rem;font-weight:600;"><div style="width:13px;height:9px;border-radius:2px;background:rgba(249,115,22,0.7)"></div>サテライト</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.76rem;font-weight:600;"><div style="width:13px;height:9px;border-radius:2px;background:rgba(168,85,247,0.7)"></div>分配金</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.76rem;font-weight:600;"><div style="width:13px;height:9px;border-radius:2px;background:rgba(239,68,68,0.7)"></div>売却対象</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.76rem;font-weight:600;"><div style="width:13px;height:9px;border-radius:2px;background:rgba(245,158,11,0.7)"></div>流動枠</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.76rem;font-weight:600;"><div style="width:13px;height:9px;border-radius:2px;background:rgba(148,163,184,0.6)"></div>その他</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.76rem;font-weight:600;"><svg width="22" height="10"><line x1="0" y1="5" x2="22" y2="5" stroke="#1d4ed8" stroke-width="2.5" stroke-dasharray="5,3"/></svg>実質テック総額</div>
   </div>
-  <div><canvas id="techBar" style="max-height:300px"></canvas></div>
-</div>
-<div style="font-size:0.78rem;color:#64748b;margin-top:10px;padding-top:8px;border-top:1px solid #f1f5f9">
-純粋テック(100%): ¥92,745,024（45.6%）／
-インデックス内テック: ¥28,092,185（13.8%）／
-非テック資産: ¥82,728,359（40.6%）
-</div>
 </div>
 
+<div class="section-title">④ 実質テック露出率（リスク指標）</div>
 <div class="card">
-<h2>⑤ 投資金額推移グラフ</h2>
-<canvas id="histChart" style="width:100%"></canvas>
+  <div class="tech-layout">
+    <div class="tech-donut"><canvas id="techChart"></canvas></div>
+    <div class="tech-right">
+      <div class="tech-total-label">実質テック露出率：<span style="color:#22c55e;">58.6%</span></div>
+      <div class="tech-sub">目安55〜60%。売却対象のレバ商品整理でさらに低下見込み。</div>
+      <div class="tech-legend">
+        <div class="legend-item"><span class="dot" style="background:#3b82f6"></span>純粋テック（100%）</div>
+        <div class="legend-item"><span class="dot" style="background:#93c5fd"></span>インデックス内テック</div>
+        <div class="legend-item"><span class="dot" style="background:#e2e8f0"></span>非テック資産</div>
+      </div>
+      <div style="font-size:0.75rem;font-weight:600;color:#475569;margin-bottom:8px;">テック寄与額 上位10</div>
+      <div class="tech-bar-row"><div class="tech-bar-name">インベスコQQQ（QQQ）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#3b82f6;width:100.0%"></div></div><div class="tech-bar-amt">&#165;1,984K (9.9%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">iFreeNEXT FANG+（紀陽）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#3b82f6;width:44.8%"></div></div><div class="tech-bar-amt">&#165;889K (4.5%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">上場日経半導体（213A）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#3b82f6;width:35.9%"></div></div><div class="tech-bar-amt">&#165;713K (3.6%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">GX半導体（2243）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#3b82f6;width:32.4%"></div></div><div class="tech-bar-amt">&#165;643K (3.2%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">Tracers NASDAQ100ゴールドプラス（50%換算）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#93c5fd;width:31.3%"></div></div><div class="tech-bar-amt">&#165;620K (3.1%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">iFreeレバレッジFANG+</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#fca5a5;width:25.8%"></div></div><div class="tech-bar-amt">&#165;511K (2.6%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">GXUSテック20（2244）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#3b82f6;width:23.0%"></div></div><div class="tech-bar-amt">&#165;456K (2.3%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">エヌビディア（NVDA）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#3b82f6;width:21.2%"></div></div><div class="tech-bar-amt">&#165;420K (2.1%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">Zテック20（iFreePlus）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#3b82f6;width:20.6%"></div></div><div class="tech-bar-amt">&#165;408K (2.0%)</div></div>
+      <div class="tech-bar-row"><div class="tech-bar-name">iFreeレバレッジS&P500（30%換算）</div><div class="tech-bar-track"><div class="tech-bar-fill" style="background:#fca5a5;width:20.5%"></div></div><div class="tech-bar-amt">&#165;407K (2.0%)</div></div>
+    </div>
+  </div>
+  <div class="alert-box">テック露出率 58.6% — 目安55〜60%に対して現在圏内。売却対象のレバ商品整理でさらに低下見込み。</div>
 </div>
+<div class="comment-box">
+  <h3>&#128221; コメント（06.24）</h3>
+  <p><strong>総資産：</strong>&#165;203,565,568 &#8594; &#165;199,450,843（<span style="color:#dc2626;font-weight:600;">&#165;4,114,725 / -2.02%</span>）</p><br>
+  <p><strong>上昇:</strong> WCM世界成長株（予想分配金提示型） +&#165;103,193 / ソーファイ（SOFI） +&#165;24,771 / AI投資（ラップ専用） +&#165;22,263<br><strong>下落:</strong> インベスコQQQ（QQQ） &minus;&#165;680,626 / 上場日経半導体（213A） &minus;&#165;721,500 / SOXL（Direxion半導体株ブル3倍ETF） &minus;&#165;905,185<br><strong>前週比（vs 06.17）：</strong>&#165;362,318（-0.18%）</p><br>
+  <p><strong>テック露出率：</strong>58.6%（前回比 -0.8pt）</p><br>
+  <p><strong>売却対象：</strong>&#165;2,801M　コアへの移行を継続</p>
 </div>
 <script>
-var ts=[1780099200000, 1780358400000, 1780704000000, 1781308800000, 1781654400000, 1781740800000, 1781913600000, 1782086400000, 1782172800000];
-var coreD=[4316.3864, 4540.8072, 4563.2807, 4580.1875, 4697.1495, 4705.0315, 4721.2308, 4735.2401, 4742.4797];var satD=[8501.0472, 8690.2305, 8460.8506, 8482.0834, 8700.8492, 8678.4823, 8811.229, 8862.3725, 8860.0606];var distD=[2135.688, 2148.1284, 2135.5836, 2079.7686, 2121.289, 2121.219, 2193.4395, 2193.4495, 2198.218];var sellD=[3217.823, 3263.0097, 3153.158, 3033.3735, 3107.5111, 2813.1445, 2843.2778, 3209.8133, 3238.9363];var fluidD=[1100.7656, 1060.4, 1006.5307, 995.6472, 1029.2945, 1315.4294, 1393.7517, 1034.7743, 995.0302];var otherD=[334.5393, 335.2675, 331.7145, 318.1966, 325.2228, 326.0028, 318.9239, 321.5039, 321.832];var techD=[11688.749, 11887.4994, 12028.1956, 11514.6949, 11810.1903, 11788.6367, 12035.0075, 11149.0685, 12083.7209];
-function mkDs(label,data,color,fill){
-  return {label:label,data:data.map(function(v,i){return {x:ts[i],y:v}}),
-    backgroundColor:color+(fill?'bb':'00'),borderColor:color,borderWidth:fill?1:2,
-    fill:fill,tension:0.3,pointRadius:3};
-}
-new Chart(document.getElementById('donutChart').getContext('2d'),{
-  type:'doughnut',
-  data:{labels:['コア','サテライト','分配金','売却対象','流動枠','別管理'],
-    datasets:[{data:[4742.48, 8860.06, 2198.22, 3238.94, 995.03, 321.83],backgroundColor:['#22c55e','#f97316','#a855f7','#ef4444','#f59e0b','#94a3b8'],borderWidth:2,borderColor:'#fff'}]},
-  options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed.toFixed(0)+'万円';}}}}
-    ,cutout:'65%'}
-});
-new Chart(document.getElementById('techDonut').getContext('2d'),{
-  type:'doughnut',
-  data:{labels:['純粋テック(100%)','インデックス内テック','非テック資産'],
-    datasets:[{data:[9274.5,2809.22,8272.84],
-      backgroundColor:['#f97316','#fbbf24','#e2e8f0'],borderWidth:2,borderColor:'#fff'}]},
-  options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}},
-    tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed.toFixed(0)+'万円';}}}}
-    ,cutout:'60%'}
-});
-new Chart(document.getElementById('techBar').getContext('2d'),{
-  type:'bar',
-  data:{labels:["\u30a4\u30f3\u30d9\u30b9\u30b3QQQ", "iFreeNEXT FANG+", "\u4e0a\u5834\u65e5\u7d4c\u534a\u5c0e\u4f53", "GX\u534a\u5c0e\u4f53", "Tracers NASDAQ100\u30b4\u30fc\u30eb\u30c9\u30d7\u30e9\u30b9", "iFree\u30ec\u30d0\u30ec\u30c3\u30b8FANG+", "GXUS\u30c6\u30c3\u30af20", "\u30a8\u30cc\u30d3\u30c7\u30a3\u30a2\uff08NVDA\uff09", "Z\u30c6\u30c3\u30af20", "iFree\u30ec\u30d0\u30ec\u30c3\u30b8S&P500", "auAM\u30ec\u30d0\u30ec\u30c3\u30b8NASDAQ100", "SOXL", "\u4e00\u6b69\u5148\u3044\u304fUS\u30c6\u30c3\u30af\u30fb\u30c8\u30c3\u30d720", "\u30d1\u30e9\u30f3\u30c6\u30a3\u30a2\uff08PLTR\uff09", "DGRW\uff08\u30a6\u30a3\u30ba\u30c0\u30e0\u30c4\u30ea\u30fc\u914d\u5f53\u6210\u9577\uff09"],datasets:[{label:'テック寄与（万円）',data:[2052.04, 889.19, 785.2, 661.32, 627.73, 538.36, 470.6, 438.52, 416.64, 407.48, 389.08, 389.0, 353.18, 328.43, 310.66],backgroundColor:["#f97316", "#f97316", "#f97316", "#f97316", "#f97316", "#ef4444", "#f97316", "#f59e0b", "#f97316", "#ef4444", "#ef4444", "#ef4444", "#f97316", "#f59e0b", "#f97316"]}]},
-  options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10}}}}}
-});
-new Chart(document.getElementById('histChart').getContext('2d'),{
-  type:'line',
-  data:{datasets:[
-    mkDs('コア',coreD,'#22c55e',true),mkDs('サテライト',satD,'#f97316',true),
-    mkDs('分配金',distD,'#a855f7',true),mkDs('売却対象',sellD,'#ef4444',true),
-    mkDs('流動枠',fluidD,'#f59e0b',true),mkDs('別管理',otherD,'#94a3b8',true),
-    {label:'実質テック総額',data:techD.map(function(v,i){return {x:ts[i],y:v}}),
-      backgroundColor:'transparent',borderColor:'#3b82f6',borderWidth:2,
-      borderDash:[5,4],fill:false,tension:0.3,pointRadius:3}
-  ]},
-  options:{
-    scales:{
-      x:{type:'linear',
-        afterBuildTicks:function(axis){axis.ticks=ts.map(function(t){return {value:t}});},
-        ticks:{callback:function(val){var d=new Date(val);return (d.getMonth()+1)+'/'+d.getDate();},font:{size:11}}},
-      y:{stacked:true,ticks:{callback:function(v){return v.toFixed(0)+'万';},font:{size:11}}}
-    },
-    plugins:{
-      legend:{position:'bottom',labels:{font:{size:11}}},
-      tooltip:{callbacks:{
-        title:function(items){var d=new Date(items[0].parsed.x);return (d.getMonth()+1)+'/'+d.getDate();},
-        afterTitle:function(items){var t=0;items.forEach(function(i){if(i.datasetIndex<6)t+=i.parsed.y;});return '投資資産合計：￥'+Math.round(t*10000).toLocaleString();},
-        label:function(ctx){return ctx.dataset.label+': '+ctx.parsed.y.toFixed(0)+'万円';}
-      }}
+(function() {
+  function toTs(yyyy,mm,dd){ return new Date(yyyy,mm-1,dd).getTime(); }
+  var weeks = [
+    { ts:toTs(2026,5,30), label:'05/30', core:4316.3864, sat:8501.0472, dist:2135.688, sell:3217.823, fluid:1100.7656, other:334.5393, tech:11688.749 },
+    { ts:toTs(2026,6,2), label:'06/02', core:4540.8072, sat:8690.2305, dist:2148.1284, sell:3263.0097, fluid:1060.4, other:335.2675, tech:11887.4994 },
+    { ts:toTs(2026,6,6), label:'06/06', core:4563.2807, sat:8460.8506, dist:2135.5836, sell:3153.158, fluid:1006.5307, other:331.7145, tech:12028.1956 },
+    { ts:toTs(2026,6,13), label:'06/13', core:4580.1875, sat:8482.0834, dist:2079.7686, sell:3033.3735, fluid:995.6472, other:318.1966, tech:11514.6949 },
+    { ts:toTs(2026,6,17), label:'06/17', core:4697.1495, sat:8700.8492, dist:2121.289, sell:3107.5111, fluid:1029.2945, other:325.2228, tech:11810.1903 },
+    { ts:toTs(2026,6,18), label:'06/18', core:4705.0315, sat:8678.4823, dist:2121.219, sell:2813.1445, fluid:1315.4294, other:326.0028, tech:11788.6367 },
+    { ts:toTs(2026,6,20), label:'06/20', core:4721.2308, sat:8811.229, dist:2193.4395, sell:2843.2778, fluid:1393.7517, other:318.9239, tech:12035.0075 },
+    { ts:toTs(2026,6,22), label:'06/22', core:4735.2401, sat:8862.3725, dist:2193.4495, sell:3209.8133, fluid:1034.7743, other:321.5039, tech:11149.0685 },
+    { ts:toTs(2026,6,23), label:'06/23', core:4742.4797, sat:8860.0606, dist:2198.218, sell:3238.9363, fluid:995.0302, other:321.832, tech:12083.7209 },
+    { ts:toTs(2026,6,24), label:'06/24', core:4741.3622, sat:8607.6914, dist:2208.6355, sell:2800.875, fluid:1269.934, other:316.5862, tech:11686.3553 }
+  ];
+  var labelMap = {};
+  weeks.forEach(function(w){ labelMap[w.ts] = w.label; });
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: { datasets: [
+      { label:'コア',      data:weeks.map(function(w){ return {x:w.ts,y:w.core}; }),  backgroundColor:'rgba(34,197,94,0.65)',   borderColor:'#22c55e', borderWidth:1.5, fill:'origin', stack:'area', tension:0.3, pointRadius:5, pointHoverRadius:7, order:2 },
+      { label:'サテライト', data:weeks.map(function(w){ return {x:w.ts,y:w.sat}; }),   backgroundColor:'rgba(249,115,22,0.65)',  borderColor:'#f97316', borderWidth:1.5, fill:'-1',     stack:'area', tension:0.3, pointRadius:5, pointHoverRadius:7, order:2 },
+      { label:'分配金',    data:weeks.map(function(w){ return {x:w.ts,y:w.dist}; }),  backgroundColor:'rgba(168,85,247,0.65)',  borderColor:'#a855f7', borderWidth:1.5, fill:'-1',     stack:'area', tension:0.3, pointRadius:5, pointHoverRadius:7, order:2 },
+      { label:'売却対象',  data:weeks.map(function(w){ return {x:w.ts,y:w.sell}; }),  backgroundColor:'rgba(239,68,68,0.65)',   borderColor:'#ef4444', borderWidth:1.5, fill:'-1',     stack:'area', tension:0.3, pointRadius:5, pointHoverRadius:7, order:2 },
+      { label:'流動枠',    data:weeks.map(function(w){ return {x:w.ts,y:w.fluid}; }), backgroundColor:'rgba(245,158,11,0.65)',  borderColor:'#f59e0b', borderWidth:1.5, fill:'-1',     stack:'area', tension:0.3, pointRadius:5, pointHoverRadius:7, order:2 },
+      { label:'その他',    data:weeks.map(function(w){ return {x:w.ts,y:w.other}; }), backgroundColor:'rgba(148,163,184,0.55)', borderColor:'#94a3b8', borderWidth:1.5, fill:'-1',     stack:'area', tension:0.3, pointRadius:5, pointHoverRadius:7, order:2 },
+      { label:'実質テック総額', data:weeks.map(function(w){ return {x:w.ts,y:w.tech}; }), borderColor:'#1d4ed8', backgroundColor:'transparent', borderWidth:2.5, borderDash:[6,3], pointBackgroundColor:'#1d4ed8', pointRadius:5, pointHoverRadius:7, fill:false, tension:0.3, order:1 }
+    ]},
+    options: {
+      responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{display:false},
+        tooltip:{ callbacks:{
+          title: function(items){ return labelMap[items[0].parsed.x]||''; },
+          afterTitle: function(items){ var total=0; items.forEach(function(item){ if(item.datasetIndex<6) total+=item.parsed.y; }); return '投資資産合計：￥'+Math.round(total*10000).toLocaleString(); },
+          label: function(c){ return ' '+c.dataset.label+'：￥'+Math.round(c.parsed.y*10000).toLocaleString(); }
+        } }
+      },
+      scales:{
+        x:{ type:'linear', min:weeks[0].ts, max:weeks[weeks.length-1].ts, grid:{display:false},
+          ticks:{ callback:function(v){ return labelMap[v]||null; }, font:{size:12,weight:'600'}, maxRotation:0 },
+          afterBuildTicks: function(axis){ axis.ticks=weeks.map(function(w){ return {value:w.ts}; }); }
+        },
+        y:{ stacked:true, beginAtZero:true, grid:{color:'#f1f5f9'},
+          ticks:{ callback:function(v){ return '￥'+v.toLocaleString()+'万'; }, font:{size:10} },
+          title:{ display:true, text:'評価額（万円）', font:{size:11}, color:'#64748b' }
+        }
+      }
     }
-  }
+  });
+})();
+new Chart(document.getElementById('donutChart'), {
+  type:'doughnut',
+  data:{ labels:['コア','サテライト','分配金','売却対象','流動枠','別管理'],
+    datasets:[{ data:[47413622,86076914,22086355,28008750,12699340,3165862],
+      backgroundColor:['#22c55e','#f97316','#a855f7','#ef4444','#f59e0b','#94a3b8'],
+      borderWidth:2, borderColor:'#fff' }]},
+  options:{ cutout:'64%', plugins:{ legend:{display:false},
+    tooltip:{ callbacks:{ label:function(c){ var t=c.dataset.data.reduce(function(a,b){return a+b;},0);
+      return '￥'+c.raw.toLocaleString()+' ('+(c.raw/t*100).toFixed(1)+'%)'; } } } } }
+});
+new Chart(document.getElementById('techChart'), {
+  type:'doughnut',
+  data:{ labels:['純粋テック','インデックス内テック','非テック資産'],
+    datasets:[{ data:[88867441,27996112,82587290],
+      backgroundColor:['#3b82f6','#93c5fd','#e2e8f0'],
+      borderWidth:2, borderColor:'#fff' }]},
+  options:{ cutout:'64%', plugins:{ legend:{display:false},
+    tooltip:{ callbacks:{ label:function(c){ var t=c.dataset.data.reduce(function(a,b){return a+b;},0);
+      return '￥'+c.raw.toLocaleString()+' ('+(c.raw/t*100).toFixed(1)+'%)'; } } } } }
 });
 </script>
 </body>
